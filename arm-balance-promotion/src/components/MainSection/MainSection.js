@@ -1,5 +1,5 @@
 import './MainSection.css';
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 let MainSection = () => {
   const CANVAS_INFO = {width: window.innerWidth, height: window.innerHeight};
@@ -7,12 +7,13 @@ let MainSection = () => {
   const canvas = useRef(null);
   
   var currentImgIndex = 1;
-  //mounted
+  var [showImgIndex, updateShowImgIndex] = useState(0);
+
+  //mounted and updated
   useEffect(() => {
     const ctx = canvas.current.getContext("2d");
     
     let drawImageToCanvas = ($imgIndex) => {
-      console.log("$imgIndex: ", $imgIndex);
       const img = new Image;
       img.src= `peacockSequence/${$imgIndex}.png`;
       img.onload = () =>{
@@ -26,10 +27,12 @@ let MainSection = () => {
       if(currentImgIndex === CANVAS_MAX_NUM) currentImgIndex = 0;
       currentImgIndex += 1;
       drawImageToCanvas(currentImgIndex);
-    }, 100)
+      updateShowImgIndex(currentImgIndex)
+    }, 500)
   })
   return (
     <div class="mainSection">
+      <div>{showImgIndex}</div>
       <canvas ref={canvas} width={CANVAS_INFO.width} height={CANVAS_INFO.height}></canvas>
     </div>
   )
